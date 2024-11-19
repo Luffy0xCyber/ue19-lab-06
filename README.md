@@ -13,4 +13,4 @@ Cette application Python interroge l'API publique JokesAPI pour obtenir une blag
 
 1. Clonez ce repository :
    ```bash
-   git clone https://github.com/votre-utilisateur/ue19-lab-05.git
+   git clone https://github.com/aniso/ue19-lab-05.git
