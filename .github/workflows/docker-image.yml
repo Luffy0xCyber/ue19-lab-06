@@ -17,15 +17,11 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          # Il faut que tu ajoutes le code token généré ci-dessous à la place de "GITHUB_TOKEN" 
-          # Attention il faut bien garder le "secrets."
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
         uses: docker/build-push-action@v5
-        # Je t'ai ajouté la partie qui va construire le conteneur et le publier sur le reggistre de Github pakcages
         with:
-          context: . # Utilise le répertoire courant pour construire l'image
+          context: .
           push: true
-          # j'ai directement mis ton username  + nom projet
-          tags: ghcr.io/Aniskhal25 /ue19-lab-05/my-app:latest # identifiant de l'image Docker taguée
+          tags: ghcr.io/Aniskhal25/ue19-lab-05/my-app:latest 
