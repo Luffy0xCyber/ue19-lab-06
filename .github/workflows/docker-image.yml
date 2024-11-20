@@ -3,21 +3,29 @@ name: Simple Docker Build
 on:
   push:
     branches:
-      - main
+      - main 
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
+          # Il faut que tu ajoutes le code token généré ci-dessous à la place de "GITHUB_TOKEN" 
+          # Attention il faut bien garder le "secrets."
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository }}/my-app:latest .
+        uses: docker/build-push-action@v5
+        # Je t'ai ajouté la partie qui va construire le conteneur et le publier sur le reggistre de Github pakcages
+        with:
+          context: . # Utilise le répertoire courant pour construire l'image
+          push: true
+          # j'ai directement mis ton username  + nom projet
+          tags: ghcr.io/Aniskhal25 /ue19-lab-05/my-app:latest # identifiant de l'image Docker taguée
