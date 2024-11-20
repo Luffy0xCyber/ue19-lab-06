@@ -24,4 +24,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/Aniskhal25/ue19-lab-05/my-app:latest 
+          tags: ghcr.io/aniskhal25/ue19-lab-05/my-app:latest 
