@@ -1,4 +1,4 @@
-name: Simple Docker Build
+name: Simple Docker Build, Scan, and Push
 
 on:
   push:
@@ -9,9 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Étape 1 : Vérifier le code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Étape 2 : Connexion au registre GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -19,9 +21,25 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.ANISCODE }}
 
+      # Étape 3 : Builder l'image Docker
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
+          push: false # L'image sera scannée avant d'être poussée
+          tags: ghcr.io/aniskhal25/ue19-lab-05/my-app:latest
+
+      # Étape 4 : Scanner l'image Docker avec Trivy
+      - name: Scan Docker image for vulnerabilities
+        uses: aquasecurity/trivy-action@v0.11.0
+        with:
+          image-ref: ghcr.io/aniskhal25/ue19-lab-05/my-app:latest
+
+      # Étape 5 : Pousser l'image Docker si le scan est réussi
+      - name: Push Docker image
+        if: success() # Pousser uniquement si le scan réussit
+        uses: docker/build-push-action@v5
+        with:
+          context: .
           push: true
-          tags: ghcr.io/aniskhal25/ue19-lab-05/my-app:latest 
+          tags: ghcr.io/aniskhal25/ue19-lab-05/my-app:latest
