@@ -37,13 +37,13 @@ Avant de commencer, assurez-vous d'avoir :
 
 Pour exécuter l'application et afficher une blague aléatoire, lancez la commande suivante :  
 ```bash
-python jokes_app.py
+python app.py
 ```  
 
 Chaque exécution renverra une nouvelle blague tirée de l'API publique.  
 
 ## À propos
 
-Ce projet a été développé dans le cadre du laboratoire **UE19** et vise à illustrer l'utilisation d'une API publique en Python.  
+Ce projet a été développé dans le cadre du laboratoire 5 de l' **UE19** et vise à illustrer l'utilisation d'une API publique en Python.  
 
 ---  
