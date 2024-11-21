@@ -8,38 +8,49 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Permissions pour accéder à GitHub Packages
+    permissions:
+      contents: read
+      packages: write
+      actions: read
+      id-token: write
+      
     steps:
       # Étape 1 : Vérifier le code
       - name: Checkout code
-        uses: actions/checkout@v4  # Mise à jour à la dernière version
+        uses: actions/checkout@v3  # Mise à jour à la dernière version
 
-      # Étape 2 : Connexion au registre GitHub Container Registry
+      # Étape 2 : 
+      - name: Configurer Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      # Etape 3 : 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3  # Mise à jour à la dernière version
+        uses: docker/login-action@v2  
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.ANISCODE }}
+          password: ${{ secrets.GITHUB_TOKEN }} # Par défaut 
 
       # Étape 3 : Builder l'image Docker
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: false # L'image sera scannée avant d'être poussée
-          tags: ghcr.io/aniskhal25/ue19-lab-05/my-app:latest
+          push: true # L'image sera scannée avant d'être poussée
+          tags: ghcr.io/aniskhal25/ue19-lab-05
 
       # Étape 4 : Scanner l'image Docker avec Trivy
-      - name: Scan Docker image for vulnerabilities
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ghcr.io/aniskhal25/ue19-lab-05/my-app:latest
+      # - name: Scan Docker image for vulnerabilities
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: ghcr.io/aniskhal25/ue19-lab-05
 
       # Étape 5 : Pousser l'image Docker si le scan est réussi
-      - name: Push Docker image
-        if: success() # Pousser uniquement si le scan réussit
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/aniskhal25/ue19-lab-05/my-app:latest
+      # - name: Push Docker image
+      #   if: success() # Pousser uniquement si le scan réussit
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ghcr.io/aniskhal25/ue19-lab-05/my-app:latest
